@@ -28,7 +28,7 @@
     </delete>
     
     <select id="selectAll" resultMap="baseResultMap">
-        SELECT * FROM t_order;
+        SELECT * FROM t_order where user_id=2;
     </select>
     
     <select id="selectRange" resultMap="baseResultMap">

@@ -27,10 +27,10 @@
             <groupId>io.shardingsphere</groupId>
             <artifactId>sharding-jdbc-spring-namespace</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.shardingsphere</groupId>
-            <artifactId>sharding-transaction-2pc-xa</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.shardingsphere</groupId>-->
+            <!--<artifactId>sharding-transaction-2pc-xa</artifactId>-->
+        <!--</dependency>-->
     
         <dependency>
             <groupId>org.aspectj</groupId>

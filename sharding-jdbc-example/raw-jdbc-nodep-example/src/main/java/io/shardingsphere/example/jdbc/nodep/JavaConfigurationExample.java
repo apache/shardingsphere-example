@@ -17,6 +17,7 @@
 
 package io.shardingsphere.example.jdbc.nodep;
 
+import io.shardingsphere.example.config.DataSourceUtil;
 import io.shardingsphere.example.config.ExampleConfiguration;
 import io.shardingsphere.example.jdbc.nodep.config.MasterSlaveConfiguration;
 import io.shardingsphere.example.jdbc.nodep.config.ShardingDatabasesAndTablesConfigurationPrecise;
@@ -75,7 +76,8 @@ public class JavaConfigurationExample {
             default:
                 throw new UnsupportedOperationException(type.name());
         }
-        return exampleConfig.getDataSource();
+//        return exampleConfig.getDataSource();
+        return DataSourceUtil.createDataSource("demo_ds_0");
     }
     
     private static DataSource getDataSourceRange() throws SQLException {

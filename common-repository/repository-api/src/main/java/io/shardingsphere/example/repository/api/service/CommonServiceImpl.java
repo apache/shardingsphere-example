@@ -21,7 +21,6 @@ import io.shardingsphere.example.repository.api.entity.Order;
 import io.shardingsphere.example.repository.api.entity.OrderItem;
 import io.shardingsphere.example.repository.api.repository.OrderItemRepository;
 import io.shardingsphere.example.repository.api.repository.OrderRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,36 +29,36 @@ public abstract class CommonServiceImpl implements CommonService {
     
     @Override
     public void initEnvironment() {
-        getOrderRepository().createTableIfNotExists();
-        getOrderItemRepository().createTableIfNotExists();
-        getOrderRepository().truncateTable();
-        getOrderItemRepository().truncateTable();
+//        getOrderRepository().createTableIfNotExists();
+//        getOrderItemRepository().createTableIfNotExists();
+//        getOrderRepository().truncateTable();
+//        getOrderItemRepository().truncateTable();
     }
     
     @Override
     public void cleanEnvironment() {
-        getOrderRepository().dropTable();
-        getOrderItemRepository().dropTable();
+//        getOrderRepository().dropTable();
+//        getOrderItemRepository().dropTable();
     }
     
-    @Transactional
+//    @Transactional
     @Override
     public void processSuccess(final boolean isRangeSharding) {
-        System.out.println("-------------- Process Success Begin ---------------");
-        List<Long> orderIds = insertData();
+//        System.out.println("-------------- Process Success Begin ---------------");
+//        List<Long> orderIds = insertData();
         printData(isRangeSharding);
-        deleteData(orderIds);
-        printData(isRangeSharding);
-        System.out.println("-------------- Process Success Finish --------------");
+//        deleteData(orderIds);
+//        printData(isRangeSharding);
+//        System.out.println("-------------- Process Success Finish --------------");
     }
     
-    @Transactional
+//    @Transactional
     @Override
     public void processFailure() {
-        System.out.println("-------------- Process Failure Begin ---------------");
-        insertData();
-        System.out.println("-------------- Process Failure Finish --------------");
-        throw new RuntimeException("Exception occur for transaction test.");
+//        System.out.println("-------------- Process Failure Begin ---------------");
+//        insertData();
+//        System.out.println("-------------- Process Failure Finish --------------");
+//        throw new RuntimeException("Exception occur for transaction test.");
     }
     
     private List<Long> insertData() {
@@ -109,14 +108,17 @@ public abstract class CommonServiceImpl implements CommonService {
     }
     
     private void printDataAll() {
-        System.out.println("---------------------------- Print Order Data -----------------------");
-        for (Object each : getOrderRepository().selectAll()) {
-            System.out.println(each);
+        getOrderRepository().selectAll();
+        System.out.println("--------------------------------------------------");
+        long before = System.nanoTime();
+        for (int i = 0; i < 1; i++) {
+            getOrderRepository().selectAll();
         }
-        System.out.println("---------------------------- Print OrderItem Data -------------------");
-        for (Object each : getOrderItemRepository().selectAll()) {
-            System.out.println(each);
-        }
+        System.out.println("Total:" + (System.nanoTime() - before));
+//        System.out.println("---------------------------- Print OrderItem Data -------------------");
+//        for (Object each : getOrderItemRepository().selectAll()) {
+//            System.out.println(each);
+//        }
     }
     
     protected abstract OrderRepository getOrderRepository();

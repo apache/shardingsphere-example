@@ -44,6 +44,7 @@ public class SpringNamespaceExample {
         switch (type) {
             case SHARDING_DATABASES:
                 return "META-INF/application-sharding-databases-precise.xml";
+//                return "META-INF/application-sharding-databases-precise_jdbc.xml";
             case SHARDING_TABLES:
                 return "META-INF/application-sharding-tables-precise.xml";
             case SHARDING_DATABASES_AND_TABLES:
