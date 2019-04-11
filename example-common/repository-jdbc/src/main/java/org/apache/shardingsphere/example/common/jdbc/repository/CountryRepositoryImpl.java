@@ -29,17 +29,17 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CountryRepositroyImpl implements CountryRepository {
+public final class CountryRepositoryImpl implements CountryRepository {
 
     private final DataSource dataSource;
 
-    public CountryRepositroyImpl(final DataSource dataSource) {
+    public CountryRepositoryImpl(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public void createTableIfNotExists() {
-        String sql = "CREATE TABLE IF NOT EXISTS t_country (id BIGINT NOT NULL AUTO_INCREMENT, name VARCHAR(50),code VARCHAR(50), language VARCHAR(50), PRIMARY KEY (id))";
+        String sql = "CREATE TABLE IF NOT EXISTS t_country (code VARCHAR(50), name VARCHAR(50), language VARCHAR(50), PRIMARY KEY (code))";
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
@@ -68,21 +68,18 @@ public class CountryRepositroyImpl implements CountryRepository {
     }
 
     @Override
-    public String insert(final Country country) {
-        String sql = "INSERT INTO t_country (name, code, language) VALUES (?, ?, ?)";
+    public Long insert(final Country country) {
+        String sql = "INSERT INTO t_country (code, name, language) VALUES (?, ?, ?)";
+        int result = 0;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, country.getName());
-            preparedStatement.setString(2, country.getCode());
+            preparedStatement.setString(1, country.getCode());
+            preparedStatement.setString(2, country.getName());
             preparedStatement.setString(3, country.getLanguage());
-            preparedStatement.executeUpdate();
-            ResultSet rs = connection.createStatement().executeQuery("SELECT @@IDENTITY");
-            while (rs.next()) {
-                country.setId(rs.getLong("@@IDENTITY"));
-            }
+            result = preparedStatement.executeUpdate();
         } catch (final SQLException ignored) {
         }
-        return country.getCode();
+        return (long) result;
     }
 
     @Override
@@ -109,10 +106,9 @@ public class CountryRepositroyImpl implements CountryRepository {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Country country = new Country();
-                country.setId(resultSet.getLong(1));
+                country.setCode(resultSet.getString(1));
                 country.setName(resultSet.getString(2));
-                country.setCode(resultSet.getString(3));
-                country.setLanguage(resultSet.getString(4));
+                country.setLanguage(resultSet.getString(3));
                 result.add(country);
             }
         } catch (final SQLException ignored) {

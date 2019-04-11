@@ -18,11 +18,10 @@
 package org.apache.shardingsphere.example.common.jpa.entity;
 
 import org.apache.shardingsphere.example.common.entity.Country;
+import org.springframework.context.annotation.Primary;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -31,23 +30,16 @@ import javax.persistence.Table;
 public class CountryEntity extends Country {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "code")
     @Override
-    public long getId() {
-        return super.getId();
+    public String getCode() {
+        return super.getCode();
     }
 
     @Column(name = "name")
     @Override
     public String getName() {
         return super.getName();
-    }
-
-    @Column(name = "code")
-    @Override
-    public String getCode() {
-        return super.getCode();
     }
 
     @Column(name = "language")

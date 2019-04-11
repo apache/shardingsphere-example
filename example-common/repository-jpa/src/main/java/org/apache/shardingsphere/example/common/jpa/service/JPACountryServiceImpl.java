@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Service
 public class JPACountryServiceImpl implements JPACountryService {
@@ -75,24 +77,21 @@ public class JPACountryServiceImpl implements JPACountryService {
 
     private List<String> insertData() {
         System.out.println("---------------------------- Insert Data ----------------------------");
-        List<String> result = new ArrayList<>();
-        Locale[] locales = Locale.getAvailableLocales();
-        int i = 0;
-        for (Locale l:locales) {
-            final String country = l.getCountry();
-            if (country == null || "".equals(country)) {
+        Set<String> result = new LinkedHashSet<>();
+        for (Locale each : Locale.getAvailableLocales()) {
+            if (result.contains(each.getCountry()) || each.getCountry().isEmpty()) {
                 continue;
             }
-            CountryEntity currCountry = new CountryEntity();
-            currCountry.setName(l.getDisplayCountry(l));
-            currCountry.setLanguage(l.getLanguage());
-            currCountry.setCode(l.getCountry());
-            countryRepository.insert(currCountry);
-            result.add(currCountry.getCode());
-            if (++i == 10) {
+            if (result.size() >= 10) {
                 break;
             }
+            result.add(each.getCountry());
+            CountryEntity entity = new CountryEntity();
+            entity.setName(each.getDisplayCountry(each));
+            entity.setLanguage(each.getLanguage());
+            entity.setCode(each.getCountry());
+            countryRepository.insert(entity);
         }
-        return result;
+        return new ArrayList<>(result);
     }
 }
