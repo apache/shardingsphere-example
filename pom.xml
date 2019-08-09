@@ -77,11 +77,11 @@
                 <artifactId>sharding-transaction-xa-core</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-transaction-base-saga</artifactId>
-                <version>${sharding-sphere.spi.impl.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.shardingsphere</groupId>-->
+                <!--<artifactId>sharding-transaction-base-saga</artifactId>-->
+                <!--<version>${sharding-sphere.spi.impl.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-transaction-base-seata-at</artifactId>
@@ -107,33 +107,33 @@
                 <artifactId>sharding-jdbc-orchestration-spring-namespace</artifactId>
                 <version>${sharding-sphere.version}</version>
             </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.shardingsphere</groupId>-->
+                <!--<artifactId>sharding-transaction-jdbc-spring</artifactId>-->
+                <!--<version>${sharding-sphere.spi.impl.version}</version>-->
+            <!--</dependency>-->
             <dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-transaction-jdbc-spring</artifactId>
-                <version>${sharding-sphere.spi.impl.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.shardingsphere</groupId>
+                <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-transaction-proxy-spring</artifactId>
                 <version>${sharding-sphere.spi.impl.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-transaction-jdbc-spring-boot-starter</artifactId>
-                <version>${sharding-sphere.spi.impl.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.shardingsphere</groupId>
-                <artifactId>sharding-transaction-proxy-spring-boot-starter</artifactId>
-                <version>${sharding-sphere.spi.impl.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.shardingsphere</groupId>-->
+                <!--<artifactId>sharding-transaction-jdbc-spring-boot-starter</artifactId>-->
+                <!--<version>${sharding-sphere.spi.impl.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.shardingsphere</groupId>-->
+                <!--<artifactId>sharding-transaction-proxy-spring-boot-starter</artifactId>-->
+                <!--<version>${sharding-sphere.spi.impl.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-orchestration-reg-zookeeper-curator</artifactId>
                 <version>${sharding-sphere.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.shardingsphere</groupId>
+                <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-orchestration-reg-etcd</artifactId>
                 <version>${sharding-sphere.spi.impl.version}</version>
             </dependency>
