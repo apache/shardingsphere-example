@@ -42,10 +42,10 @@ import java.util.concurrent.locks.LockSupport;
     Download seata-server from here https://github.com/seata/seata/releases
  */
 public class ExampleMain {
-
+    
     private static String configFile = "/META-INF/sharding-databases-tables.yaml";
 //    private static String configFile = "/META-INF/master-slave.yaml";
-
+    
     public static void main(final String[] args) throws SQLException, IOException {
         DataSource dataSource = YamlShardingDataSourceFactory.createDataSource(getFile(configFile));
         ExampleService exampleService = getExampleService(dataSource);
@@ -53,15 +53,15 @@ public class ExampleMain {
         processSeataTransaction(dataSource, exampleService);
         exampleService.cleanEnvironment();
     }
-
+    
     private static File getFile(final String fileName) {
         return new File(Thread.currentThread().getClass().getResource(fileName).getFile());
     }
-
+    
     private static ExampleService getExampleService(final DataSource dataSource) {
         return new OrderServiceImpl(dataSource);
     }
-
+    
     private static void processSeataTransaction(final DataSource dataSource, final ExampleService exampleService) throws SQLException {
         TransactionTypeHolder.set(TransactionType.BASE);
         System.out.println("------############## Start seata succeed transaction ##################------");
@@ -87,7 +87,7 @@ public class ExampleMain {
         System.out.println("------############# End seata failure transaction #############------");
         truncateTable(dataSource);
     }
-
+    
     private static void insertSuccess(final Connection connection, final ExampleService exampleService) throws SQLException {
         for (int i = 0; i < 10; i++) {
             Order order = new Order();
@@ -102,7 +102,7 @@ public class ExampleMain {
         }
         exampleService.printData();
     }
-
+    
     private static Long insertOrder(final Connection connection, final Order order) {
         String sql = "INSERT INTO t_order (user_id, address_id, status) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -119,7 +119,7 @@ public class ExampleMain {
         }
         return order.getOrderId();
     }
-
+    
     private static Long insertOrderItem(final Connection connection, final OrderItem orderItem) {
         String sql = "INSERT INTO t_order_item (order_id, user_id, status) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -136,7 +136,7 @@ public class ExampleMain {
         }
         return orderItem.getOrderItemId();
     }
-
+    
     private static void truncateTable(final DataSource dataSource) throws SQLException {
         OrderRepositoryImpl orderRepository = new OrderRepositoryImpl(dataSource);
         OrderItemRepositoryImpl orderItemRepository = new OrderItemRepositoryImpl(dataSource);
