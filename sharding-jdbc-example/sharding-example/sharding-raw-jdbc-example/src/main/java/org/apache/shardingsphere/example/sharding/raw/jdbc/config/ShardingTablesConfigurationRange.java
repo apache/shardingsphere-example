@@ -19,7 +19,7 @@ package org.apache.shardingsphere.example.sharding.raw.jdbc.config;
 
 import org.apache.shardingsphere.example.algorithm.PreciseModuloShardingTableAlgorithm;
 import org.apache.shardingsphere.example.algorithm.RangeModuloShardingTableAlgorithm;
-import org.apache.shardingsphere.example.common.DataSourceUtil;
+import org.apache.shardingsphere.example.core.api.DataSourceUtil;
 import org.apache.shardingsphere.example.config.ExampleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
@@ -41,6 +41,7 @@ public final class ShardingTablesConfigurationRange implements ExampleConfigurat
         shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
         shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
         shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
+        shardingRuleConfig.getBroadcastTables().add("t_address");
         shardingRuleConfig.setDefaultTableShardingStrategyConfig(
                 new StandardShardingStrategyConfiguration("order_id", new PreciseModuloShardingTableAlgorithm(), new RangeModuloShardingTableAlgorithm()));
         return ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, new Properties());
@@ -48,19 +49,25 @@ public final class ShardingTablesConfigurationRange implements ExampleConfigurat
     
     private static TableRuleConfiguration getOrderTableRuleConfiguration() {
         TableRuleConfiguration result = new TableRuleConfiguration("t_order", "demo_ds.t_order_${[0, 1]}");
-        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", new Properties()));
+        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", getProperties()));
         return result;
     }
     
     private static TableRuleConfiguration getOrderItemTableRuleConfiguration() {
         TableRuleConfiguration result = new TableRuleConfiguration("t_order_item", "demo_ds.t_order_item_${[0, 1]}");
-        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_item_id", new Properties()));
+        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_item_id", getProperties()));
         return result;
     }
     
     private static Map<String, DataSource> createDataSourceMap() {
         Map<String, DataSource> result = new HashMap<>();
         result.put("demo_ds", DataSourceUtil.createDataSource("demo_ds"));
+        return result;
+    }
+    
+    private static Properties getProperties() {
+        Properties result = new Properties();
+        result.setProperty("worker.id", "123");
         return result;
     }
 }

@@ -6,14 +6,15 @@
     <parent>
         <groupId>org.apache.shardingsphere.example</groupId>
         <artifactId>sharding-jdbc-example</artifactId>
-        <version>4.0.0-RC2-SNAPSHOT</version>
+        <version>4.0.0-RC3-SNAPSHOT</version>
     </parent>
     <artifactId>transaction-example</artifactId>
+    <name>Example::transaction::root</name>
+    
     <packaging>pom</packaging>
-
+    
     <modules>
-        <module>transaction-2pc-xa-example</module>
-        <module>transaction-base-saga-example</module>
+        <module>transaction-2pc-xa-raw-jdbc-example</module>
+        <module>transaction-base-seata-raw-jdbc-example</module>
     </modules>
-
 </project>

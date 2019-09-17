@@ -1,64 +1,77 @@
 # ShardingSphere-example
 
-ShardingSphere example.
-
 Example for 1.x please see tags in `https://github.com/apache/incubator-shardingsphere/tree/${tag}/sharding-jdbc-example`
 
-Example for 2.x or 3.x please see tags in `https://github.com/apache/incubator-shardingsphere-example/tree/${tag}`
+Example for 2.x or 3.x or 4.x please see tags in `https://github.com/apache/incubator-shardingsphere-example/tree/${tag}`
 
-Please do not use `dev` branch to run your example, example of `dev` branch is not released yet. 
+**Need attention**
 
-The manual schema initial script is in `https://github.com/apache/incubator-shardingsphere-example/blob/dev/src/resources/manual_schema.sql`, 
-please execute it before you first run the example.
+- *Please do not use `dev` branch to run your example, example of `dev` branch is not released yet.*
 
-Please make sure master-slave data sync on MySQL is running correctly. Otherwise this example will query empty data from slave.
+- *The manual schema initial script is in `https://github.com/apache/incubator-shardingsphere-example/blob/dev/src/resources/manual_schema.sql`, please execute it before you first run the example.*
 
-## Using docker-compose to config startup environment
-before we use docker compose, please install docker first : https://docs.docker.com/compose/install/
+- *Please make sure master-slave data sync on MySQL is running correctly. Otherwise this example will query empty data from slave.*
 
-#### sharding-jdbc
-1. access the docker folder (cd docker/sharding-jdbc/sharding)
-2. launch the environment by docker compose (docker-compose up -d)
-3. access mysql / etcd / zookeeper as you want
-4. if there is conflict on port, just modify the mapper port in docker-compose.yml and then launch docker compose again(docker-compose up -d)
-5. if you want to stop these environment, use command docker-compose down
+## Before start the example if you want use `dev` branch
 
-#### sharding-proxy
-1. access the docker folder (cd docker/sharding-proxy/sharding)
-2. launch the environment by docker compose (docker-compose up -d)
-3. access proxy by `mysql -h127.0.0.1 -P13308 -proot -uroot`
-4. if there is conflict on port, just modify the mapper port in docker-compose.yml and then launch docker compose again(docker-compose up -d)
-5. if you want to stop these environment, use command docker-compose down
+Please make sure some dependencies from [shardingsphere](https://github.com/apache/incubator-shardingsphere) and [shardingsphere-spi-impl](https://github.com/OpenSharding/shardingsphere-spi-impl) have been installed since some examples depend on that.
+if you are a newbie for shardingsphere, you could prepare the dependencies as following: 
 
-to clean the docker container , you could use docker rm `docker ps -a -q` (be careful)
+1.download and install [shardingsphere](https://github.com/apache/incubator-shardingsphere): 
 
-## sharding-sphere-example module design
+```bash
+## download the code of shardingsphere
+git clone https://github.com/apache/incubator-shardingsphere.git
 
-### project module
+## checkout a specific version, example is 4.0.0-RC1
+cd incubator-shardingsphere && git checkout 4.0.0-RC1
+
+## install the dependencies
+mvn clean install -Prelease
 ```
-sharding-sphere-example
-  ├── example-common
+
+2.download and install [shardingsphere-spi-impl](https://github.com/OpenSharding/shardingsphere-spi-impl): 
+
+```bash
+## download the code of shardingsphere-spi-impl
+git clone https://github.com/OpenSharding/shardingsphere-spi-impl.git
+
+## checkout a specific version, example is 4.0.0-RC1
+cd shardingsphere-spi-impl && git checkout 4.0.0-RC1
+
+## install the dependencies
+mvn clean install
+```
+
+## shardingsphere-example module design
+
+### project structure
+
+```
+shardingsphere-example
+  ├── example-core
   │   ├── config-utility
-  │   ├── repository-api
-  │   ├── repository-jdbc
-  │   ├── repository-jpa
-  │   └── repository-mybatis
+  │   ├── example-api
+  │   ├── example-raw-jdbc
+  │   ├── example-spring-jpa
+  │   └── example-spring-mybatis
   ├── sharding-jdbc-example
-  │   ├── hint-example
-  │   │   └── hint-raw-jdbc-example
-  │   ├── orchestration-example
-  │   │   ├── orchestration-raw-jdbc-example
-  │   │   ├── orchestration-spring-boot-example
-  │   │   └── orchestration-spring-namespace-example
   │   ├── sharding-example
   │   │   ├── sharding-raw-jdbc-example
   │   │   ├── sharding-spring-boot-jpa-example
   │   │   ├── sharding-spring-boot-mybatis-example
   │   │   ├── sharding-spring-namespace-jpa-example
   │   │   └── sharding-spring-namespace-mybatis-example
-  │   └── transaction-example
-  │       ├── transaction-2pc-xa-example
-  │       └── transaction-base-saga-example
+  │   ├── orchestration-example
+  │   │   ├── orchestration-raw-jdbc-example
+  │   │   ├── orchestration-spring-boot-example
+  │   │   └── orchestration-spring-namespace-example
+  │   ├── transaction-example
+  │   │   ├── transaction-2pc-xa-example
+  │   │   └──transaction-base-seata-example
+  │   ├── other-feature-example
+  │   │   ├── hint-example
+  │   │   └── encrypt-example
   ├── sharding-proxy-example
   │   └── sharding-proxy-boot-mybatis-example
   └── src/resources
@@ -66,46 +79,43 @@ sharding-sphere-example
 ```
 
 ### Best practice for sharding data
+
 * sharding databases
 * sharding tables
 * sharding databases and tables
 * master-slave
 * sharding & master-slave
 
-you can get more detail from **[sharding-example](./sharding-jdbc-example/sharding-example)**
+You can get more detail from **[sharding-example](./sharding-jdbc-example/sharding-example)**
 
 ### Best practice for sharding + orchestration
-* local zookeeper/etcd & sharding
 
-    local sharding configuration can override the configuration of zookeeper/etcd.
+* using local configuration file for zookeeper/etcd & sharding
+* using register center(zookeeper/etcd)'s configuration for sharding
 
-* cloud zookeeper/etcd & sharding
-
-    shardingsphere will load the sharding configuration form zookeeper/etcd directly.
-
-you can get more detail from **[orchestration-example](./sharding-jdbc-example/orchestration-example)**
+You can get more detail from **[orchestration-example](./sharding-jdbc-example/orchestration-example)**
 
 ### Best Practice for sharding + distribution-transaction
+
 * 2pc-xa transaction
-* base-saga transaction
+* base-seata transaction
 
-you can get more detail from **[transaction-example](./sharding-jdbc-example/transaction-example)**
+You can get more detail from **[transaction-example](./sharding-jdbc-example/transaction-example)**
 
-### how to use hint routing
-you can get more detail from **[hint-example](./sharding-jdbc-example/hint-example)**
+### Best Practice for hint routing
 
-### how to config none-sharding tables
-we will add none-sharding example recently.
+You can get more detail from **[hint-example](./sharding-jdbc-example/other-feature-example/hint-example)**
 
-### how to config broadcast-table
-we will add broadcast-table example recently.
+### Best Practice for data encrypt
 
-### how to use APM with shardingsphere
-we will add APM example recently.
+You can get more detail from **[encrypt-example](./sharding-jdbc-example/other-feature-example/encrypt-example)**
 
-### how to encrypt & decrypt data in shardingsphere
-we prefer to add encrypt & decrypt example recently.
+### Best Practice for APM
 
-### how to use sharding-proxy with jdbc.
-we prefer to add a docker base example recently.
+We will add APM example recently.
 
+### Best Practice for sharding-proxy.
+
+We prefer to add a docker base example recently.
+
+### [how to use docker to config sharding-jdbc & sharding-proxy](./docker/docker-compose.md) (Optional)

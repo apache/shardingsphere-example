@@ -6,15 +6,15 @@
     <parent>
         <groupId>org.apache.shardingsphere.example</groupId>
         <artifactId>sharding-jdbc-example</artifactId>
-        <version>4.0.0-RC2-SNAPSHOT</version>
+        <version>4.0.0-RC3-SNAPSHOT</version>
     </parent>
     <artifactId>orchestration-example</artifactId>
+    <name>Example::orchestration</name>
     <packaging>pom</packaging>
-
+    
     <modules>
         <module>orchestration-raw-jdbc-example</module>
         <module>orchestration-spring-boot-example</module>
         <module>orchestration-spring-namespace-example</module>
     </modules>
-
 </project>

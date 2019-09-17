@@ -20,7 +20,7 @@ package org.apache.shardingsphere.example.sharding.raw.jdbc.config;
 import com.google.common.collect.Lists;
 import org.apache.shardingsphere.example.algorithm.PreciseModuloShardingDatabaseAlgorithm;
 import org.apache.shardingsphere.example.algorithm.PreciseModuloShardingTableAlgorithm;
-import org.apache.shardingsphere.example.common.DataSourceUtil;
+import org.apache.shardingsphere.example.core.api.DataSourceUtil;
 import org.apache.shardingsphere.example.config.ExampleConfiguration;
 import org.apache.shardingsphere.api.config.masterslave.MasterSlaveRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
@@ -45,6 +45,7 @@ public final class ShardingMasterSlaveConfigurationPrecise implements ExampleCon
         shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
         shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
         shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
+        shardingRuleConfig.getBroadcastTables().add("t_address");
         shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", new PreciseModuloShardingDatabaseAlgorithm()));
         shardingRuleConfig.setDefaultTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("order_id", new PreciseModuloShardingTableAlgorithm()));
         shardingRuleConfig.setMasterSlaveRuleConfigs(getMasterSlaveRuleConfigurations());
@@ -53,13 +54,13 @@ public final class ShardingMasterSlaveConfigurationPrecise implements ExampleCon
     
     private static TableRuleConfiguration getOrderTableRuleConfiguration() {
         TableRuleConfiguration result = new TableRuleConfiguration("t_order", "ds_${0..1}.t_order_${[0, 1]}");
-        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", new Properties()));
+        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", getProperties()));
         return result;
     }
     
     private static TableRuleConfiguration getOrderItemTableRuleConfiguration() {
         TableRuleConfiguration result = new TableRuleConfiguration("t_order_item", "ds_${0..1}.t_order_item_${[0, 1]}");
-        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_item_id", new Properties()));
+        result.setKeyGeneratorConfig(new KeyGeneratorConfiguration("SNOWFLAKE", "order_item_id", getProperties()));
         return result;
     }
     
@@ -77,6 +78,12 @@ public final class ShardingMasterSlaveConfigurationPrecise implements ExampleCon
         result.put("demo_ds_master_1", DataSourceUtil.createDataSource("demo_ds_master_1"));
         result.put("demo_ds_master_1_slave_0", DataSourceUtil.createDataSource("demo_ds_master_1_slave_0"));
         result.put("demo_ds_master_1_slave_1", DataSourceUtil.createDataSource("demo_ds_master_1_slave_1"));
+        return result;
+    }
+    
+    private static Properties getProperties() {
+        Properties result = new Properties();
+        result.setProperty("worker.id", "123");
         return result;
     }
 }

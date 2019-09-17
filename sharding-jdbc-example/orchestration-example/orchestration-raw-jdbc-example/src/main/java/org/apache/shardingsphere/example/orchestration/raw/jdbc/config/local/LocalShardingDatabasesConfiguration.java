@@ -17,7 +17,7 @@
 
 package org.apache.shardingsphere.example.orchestration.raw.jdbc.config.local;
 
-import org.apache.shardingsphere.example.common.DataSourceUtil;
+import org.apache.shardingsphere.example.core.api.DataSourceUtil;
 import org.apache.shardingsphere.example.config.ExampleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.KeyGeneratorConfiguration;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
@@ -46,6 +46,8 @@ public final class LocalShardingDatabasesConfiguration implements ExampleConfigu
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
         shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
+        shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
+        shardingRuleConfig.getBroadcastTables().add("t_address");
         shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "demo_ds_${user_id % 2}"));
         OrchestrationConfiguration orchestrationConfig = new OrchestrationConfiguration("orchestration-sharding-db-data-source", registryCenterConfig, true);
         return OrchestrationShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, new Properties(), orchestrationConfig);
@@ -69,6 +71,8 @@ public final class LocalShardingDatabasesConfiguration implements ExampleConfigu
     }
     
     private static KeyGeneratorConfiguration getKeyGeneratorConfiguration() {
-        return new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", new Properties());
+        Properties properties = new Properties();
+        properties.setProperty("worker.id", "123");
+        return new KeyGeneratorConfiguration("SNOWFLAKE", "order_id", properties);
     }
 }

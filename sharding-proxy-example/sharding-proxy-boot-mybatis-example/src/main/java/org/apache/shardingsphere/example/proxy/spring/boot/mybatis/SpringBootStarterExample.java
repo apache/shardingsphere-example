@@ -17,13 +17,14 @@
 
 package org.apache.shardingsphere.example.proxy.spring.boot.mybatis;
 
-import org.apache.shardingsphere.example.common.mybatis.service.SpringPojoService;
-import org.apache.shardingsphere.example.common.service.CommonService;
+import org.apache.shardingsphere.example.core.api.service.ExampleService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+
+import java.sql.SQLException;
 
 /*
  * 1. Copy resources/conf/*.yaml to sharding-proxy conf folder and overwrite original file.
@@ -32,31 +33,31 @@ import org.springframework.context.annotation.ComponentScan;
  * 2. Please make sure sharding-proxy is running before you run this example.
  */
 @ComponentScan("org.apache.shardingsphere.example")
-@MapperScan(basePackages = "org.apache.shardingsphere.example.common.mybatis.repository")
+@MapperScan(basePackages = "org.apache.shardingsphere.example.core.mybatis.repository")
 @SpringBootApplication
 public class SpringBootStarterExample {
     
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws SQLException {
         try (ConfigurableApplicationContext applicationContext = SpringApplication.run(SpringBootStarterExample.class, args)) {
             process(applicationContext);
         }
     }
     
-    private static void process(final ConfigurableApplicationContext applicationContext) {
-        CommonService commonService = getCommonService(applicationContext);
-        commonService.initEnvironment();
-        commonService.processSuccess();
+    private static void process(final ConfigurableApplicationContext applicationContext) throws SQLException {
+        ExampleService exampleService = getExampleService(applicationContext);
+        exampleService.initEnvironment();
+        exampleService.processSuccess();
         try {
-            commonService.processFailure();
+            exampleService.processFailure();
         } catch (final Exception ex) {
             System.out.println(ex.getMessage());
-            commonService.printData();
+            exampleService.printData();
         } finally {
-            commonService.cleanEnvironment();
+            exampleService.cleanEnvironment();
         }
     }
     
-    private static CommonService getCommonService(final ConfigurableApplicationContext applicationContext) {
-        return applicationContext.getBean(SpringPojoService.class);
+    private static ExampleService getExampleService(final ConfigurableApplicationContext applicationContext) {
+        return applicationContext.getBean(ExampleService.class);
     }
 }
