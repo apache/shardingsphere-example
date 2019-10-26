@@ -8,3 +8,4 @@ orchestration:
     props:
       group: SHARDING_SPHERE_DEFAULT_GROUP
       timeout: 3000
+      
