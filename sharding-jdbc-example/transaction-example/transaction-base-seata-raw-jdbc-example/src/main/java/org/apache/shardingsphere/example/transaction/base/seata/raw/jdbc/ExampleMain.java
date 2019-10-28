@@ -23,12 +23,11 @@ import org.apache.shardingsphere.example.core.api.service.ExampleService;
 import org.apache.shardingsphere.example.core.jdbc.repository.OrderItemRepositoryImpl;
 import org.apache.shardingsphere.example.core.jdbc.repository.OrderRepositoryImpl;
 import org.apache.shardingsphere.example.core.jdbc.service.OrderServiceImpl;
-import org.apache.shardingsphere.shardingjdbc.api.yaml.YamlShardingDataSourceFactory;
+import org.apache.shardingsphere.example.transaction.base.seata.raw.jdbc.factory.YamlTransactionSeataDataSourceFactory;
 import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionTypeHolder;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,22 +41,18 @@ import java.util.concurrent.locks.LockSupport;
     Download seata-server from here https://github.com/seata/seata/releases
  */
 public class ExampleMain {
-    
-    private static String configFile = "/META-INF/sharding-databases-tables.yaml";
-//    private static String configFile = "/META-INF/master-slave.yaml";
+    //private static YamlConfigType yamlConfigType = YamlConfigType.SHARDING_DATABASE_TABLES;
+    private static YamlConfigType yamlConfigType = YamlConfigType.MASTER_SLAVE;
+
     
     public static void main(final String[] args) throws SQLException, IOException {
-        DataSource dataSource = YamlShardingDataSourceFactory.createDataSource(getFile(configFile));
+        DataSource dataSource = YamlTransactionSeataDataSourceFactory.newInstance(yamlConfigType);
         ExampleService exampleService = getExampleService(dataSource);
         exampleService.initEnvironment();
         processSeataTransaction(dataSource, exampleService);
         exampleService.cleanEnvironment();
     }
-    
-    private static File getFile(final String fileName) {
-        return new File(Thread.currentThread().getClass().getResource(fileName).getFile());
-    }
-    
+
     private static ExampleService getExampleService(final DataSource dataSource) {
         return new OrderServiceImpl(dataSource);
     }
