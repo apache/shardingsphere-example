@@ -85,7 +85,7 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     
     @Override
     public void delete(final Long orderItemId) throws SQLException {
-        String sql = "DELETE FROM t_order_item WHERE order_item_id=?";
+        String sql = "DELETE FROM t_order_item WHERE order_id=?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, orderItemId);
