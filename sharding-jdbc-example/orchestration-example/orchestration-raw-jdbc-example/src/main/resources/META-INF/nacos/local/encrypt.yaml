@@ -31,4 +31,3 @@ encryptRule:
 props:
   query.with.cipher.column: true
   sql.show: false
-  
