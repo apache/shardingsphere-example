@@ -48,5 +48,4 @@
         <property name="basePackage" value="org.apache.shardingsphere.example.core.mybatis.repository"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
-
 </beans>
