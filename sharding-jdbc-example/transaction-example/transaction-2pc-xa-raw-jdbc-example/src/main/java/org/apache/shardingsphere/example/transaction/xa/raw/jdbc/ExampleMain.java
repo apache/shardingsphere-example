@@ -83,6 +83,7 @@ public class ExampleMain {
         for (int i = 0; i < 10; i++) {
             Order order = new Order();
             order.setUserId(i);
+            order.setAddressId(i);
             order.setStatus("INIT");
             insertOrder(connection, order);
         }
@@ -90,10 +91,11 @@ public class ExampleMain {
     }
     
     private static Long insertOrder(final Connection connection, final Order order) throws SQLException {
-        String sql = "INSERT INTO t_order (user_id, status) VALUES (?, ?)";
+        String sql = "INSERT INTO t_order (user_id, address_id, status) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, order.getUserId());
-            preparedStatement.setString(2, order.getStatus());
+            preparedStatement.setLong(2, order.getAddressId());
+            preparedStatement.setString(3, order.getStatus());
             preparedStatement.executeUpdate();
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if (resultSet.next()) {
