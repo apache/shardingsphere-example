@@ -89,7 +89,7 @@ public class ExampleMain {
         exampleService.printData();
     }
     
-    private static Long insertOrder(final Connection connection, final Order order) {
+    private static Long insertOrder(final Connection connection, final Order order) throws SQLException {
         String sql = "INSERT INTO t_order (user_id, status) VALUES (?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, order.getUserId());
@@ -100,7 +100,6 @@ public class ExampleMain {
                     order.setOrderId(resultSet.getLong(1));
                 }
             }
-        } catch (final SQLException ignored) {
         }
         return order.getOrderId();
     }
