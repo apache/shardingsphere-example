@@ -1,6 +1,6 @@
 # ShardingSphere-example
 
-Note: The examples had been transferred to [incubator-shardingsphere/examples](https://github.com/apache/incubator-shardingsphere/tree/master/examples). All tags reserved, but will never be updated any more.
+**Note: The examples had been transferred to [incubator-shardingsphere/examples](https://github.com/apache/incubator-shardingsphere/tree/master/examples). All tags reserved, but will never be updated any more.**
 
 Example for 1.x please see tags in `https://github.com/apache/incubator-shardingsphere/tree/${tag}/sharding-jdbc-example`
 
