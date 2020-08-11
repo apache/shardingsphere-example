@@ -1,4 +1,4 @@
-**Note: The examples had been transferred to [incubator-shardingsphere/examples](https://github.com/apache/incubator-shardingsphere/tree/master/examples). All tags reserved, but will never be updated any more.**
+**Note: The examples had been transferred to [shardingsphere/examples](https://github.com/apache/shardingsphere/tree/master/examples). All tags reserved, but will never be updated any more.**
 
 # ShardingSphere-example
 
